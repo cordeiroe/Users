@@ -1,4 +1,5 @@
 var fields = document.querySelectorAll("#form-user-create [name]");
+fields === undefined;
 var user = {};
 var today = new Date();
 var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
@@ -11,7 +12,7 @@ function addLine(dataUser){
         <tr>
             <td><img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
             <td>${dataUser.name}</td>
-            <td>${dataUser.email}</td>
+            <td>${dataUser.email}</td>-
             <td>${dataUser.admin}</td>
             <td>${date}</td>
             <td>
@@ -41,7 +42,7 @@ document.getElementById("form-user-create").addEventListener("submit", function(
     
         }
 
-     });
+    });
 
     
     var objectUser = new User(
@@ -51,10 +52,10 @@ document.getElementById("form-user-create").addEventListener("submit", function(
         user.country, 
         user.email, 
         user.password, 
-        user.photo,
+        user.photo, 
         user.admin
     );
 
-    addLine(user);
+    addLine(objectUser);
 
 });
