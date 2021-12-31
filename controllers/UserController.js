@@ -4,12 +4,12 @@ class UserController {
 
         this.formEl = document.getElementById(formId);
         this.tableEl = document.getElementById(tableId);
-        this.submit();
+        this.submit(); 
     }
 
     onEditCancel(){
 
-        document.querySelector("#box-user-update .btn-cancel").addEventListener("click" e=> {
+        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e => {
 
             this.showPanelCreate();
 
@@ -103,7 +103,7 @@ class UserController {
 
         [...this.formEl.elements].forEach(function(field, index){
 
-            if (['name', 'emai', 'password'].indexOf(field.name) > -1 && !field.value){
+            if (['name', 'email', 'password'].indexOf(field.name) > -1 && !field.value){
                 
                 field.parentElement.classList.add('has-error');
                 isValid = false;
@@ -175,7 +175,7 @@ class UserController {
         tr.querySelector(".btn-edit").addEventListener("click", e=> {
 
             console.log(JSON.parse(tr.dataset.user)); 
-            this.showPanelUpdate()
+            this.showPanelCreate();
 
             
 
@@ -184,22 +184,22 @@ class UserController {
         this.tableEl.appendChild(tr);
     
         this.updateCount();
+    }
 
-        showPanelCreate(){
 
-            document.querySelector("#box-user-create").style.display = "block";
-            document.querySelector("#box-user-update").style.display = "none";
+    showPanelCreate(){
 
-        }
+        document.querySelector("#box-user-create").style.display = "block";
+        document.querySelector("#box-user-update").style.display = "none";
 
-        showPanelUpdate(){
+    }
 
-            document.querySelector("#box-user-create").style.display = "none";
-            document.querySelector("#box-user-update").style.display = "block";
+    showPanelUpdate(){
 
-        }
+        document.querySelector("#box-user-create").style.display = "none";
+        document.querySelector("#box-user-update").style.display = "block";
 
-    }; 
+    }
 
     updateCount(){ 
 
@@ -216,7 +216,6 @@ class UserController {
 
         });
 
-        console.log(numberAdmin);
         document.querySelector("#number-users").innerHTML = numberUsers;
         document.querySelector("#number-admin").innerHTML = numberAdmin;
 
