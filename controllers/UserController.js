@@ -7,6 +7,16 @@ class UserController {
         this.submit();
     }
 
+    onEditCancel(){
+
+        document.querySelector("#box-user-update .btn-cancel").addEventListener("click" e=> {
+
+            this.showPanelCreate();
+
+        });
+
+    }
+
     submit(){
 
         this.formEl.addEventListener("submit", event => {
@@ -18,6 +28,8 @@ class UserController {
             btn.disabled = true;
 
             let values = this.getValues();
+
+            if (!values) return false;
 
             this.getPhoto().then((content) => {
 
@@ -86,7 +98,17 @@ class UserController {
     getValues(){
             
         let user = {};
+        let isValid = true;
+
+
         [...this.formEl.elements].forEach(function(field, index){
+
+            if (['name', 'emai', 'password'].indexOf(field.name) > -1 && !field.value){
+                
+                field.parentElement.classList.add('has-error');
+                isValid = false;
+            }
+
 
             if (field.name == "gender"){
         
@@ -106,7 +128,13 @@ class UserController {
     
         });
     
-        
+        if (!isValid){
+
+            return false;
+
+        }
+
+
         return new User(
             user.name, 
             user.gender, 
@@ -122,9 +150,11 @@ class UserController {
     } // fecha getValues()
 
 
-    addLine(dataUser, tableId){
+    addLine(dataUser){
 
-        let tr = document.createElement('tr')
+        let tr = document.createElement('tr');
+
+        tr.dataset.user = JSON.stringify(dataUser);
 
         tr.innerHTML = `
             <tr>
@@ -132,16 +162,64 @@ class UserController {
                 <td>${dataUser.name}</td>
                 <td>${dataUser.email}</td>
                 <td>${(dataUser.admin) ? 'Sim' : 'Não'} </td>
-                <td>${dataUser.register ? }</td>
+                <td>${Utils.dateFormat(dataUser.register)}</td>
                 
                 <td>
-                    <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
+                    <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
                     <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
                 </td>
             </tr>
             `; 
 
+
+        tr.querySelector(".btn-edit").addEventListener("click", e=> {
+
+            console.log(JSON.parse(tr.dataset.user)); 
+            this.showPanelUpdate()
+
+            
+
+        });
+
         this.tableEl.appendChild(tr);
     
+        this.updateCount();
+
+        showPanelCreate(){
+
+            document.querySelector("#box-user-create").style.display = "block";
+            document.querySelector("#box-user-update").style.display = "none";
+
+        }
+
+        showPanelUpdate(){
+
+            document.querySelector("#box-user-create").style.display = "none";
+            document.querySelector("#box-user-update").style.display = "block";
+
+        }
+
     }; 
+
+    updateCount(){ 
+
+        let numberUsers = 0;
+        let numberAdmin = 0;
+
+        [...this.tableEl.children].forEach(tr => {
+
+            numberUsers++;
+
+            let user = JSON.parse(tr.dataset.user);
+
+            if (user._admin) numberAdmin++;
+
+        });
+
+        console.log(numberAdmin);
+        document.querySelector("#number-users").innerHTML = numberUsers;
+        document.querySelector("#number-admin").innerHTML = numberAdmin;
+
+    } //Metodo para validação se foi adc um novo user + acrescer o contador de usuarios no front
+
 }
